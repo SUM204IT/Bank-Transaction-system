@@ -9,6 +9,7 @@ app.use(cookieParser());
 app.use(cors({
     origin: [
         "http://localhost:5173",
+        "https://bank-transaction-system-nu.vercel.app"
     ],
     credentials: true
 }))
