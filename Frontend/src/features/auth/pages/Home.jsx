@@ -1,8 +1,22 @@
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
+import LoadingScreen from "../components/Loading";
 
 export default function Home() {
 
   const navigate = useNavigate();
+  let {user, loading, handleLogout} = useAuth();
+
+  async function logoutHandler() {
+    const success = await handleLogout();
+    if(success){
+      navigate("/login");
+    }
+  }
+
+  if(loading){
+    return (<LoadingScreen/>)
+  }
 
   return (
     <div className="min-h-screen bg-[#0b1120] text-white overflow-hidden">
@@ -34,12 +48,24 @@ export default function Home() {
 
         <div className="flex items-center gap-4">
 
-          <button
+        {
+          user ? (
+            <button
+            onClick={logoutHandler}
+            className="px-5 py-2 rounded-xl text-sm text-gray-300 hover:bg-indigo-600 text-sm font-medium transition shadow-lg shadow-indigo-500/20"
+          >
+            Logout
+          </button>
+          ) : 
+          (
+            <button
             onClick={() => navigate("/login")}
-            className="px-5 py-2 rounded-xl text-sm text-gray-300 hover:text-white transition"
+            className="px-5 py-2 rounded-xl text-sm text-gray-300 hover:bg-indigo-600 text-sm font-medium transition shadow-lg shadow-indigo-500/20"
           >
             Login
           </button>
+          )
+        }
 
           <button
             onClick={() => navigate("/register")}
@@ -85,12 +111,16 @@ export default function Home() {
               Create Account
             </button>
 
-            <button
+            {
+              !user && (
+                <button
               onClick={() => navigate("/login")}
-              className="px-7 py-4 rounded-2xl border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] transition font-medium text-gray-300"
+              className="px-7 py-4 rounded-2xl border border-white/10 bg-white/[0.03] hover:bg-indigo-600 text-sm font-medium transition shadow-lg shadow-indigo-500/20 text-gray-300"
             >
               Login
             </button>
+              )
+            }
 
           </div>
 

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { sendRegistrationEmail } = require("../services/email.service");
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -21,6 +22,10 @@ const userSchema = new mongoose.Schema({
     }
 },{
     timestamps: true
+});
+
+userSchema.pre("save", async function () {
+    await sendRegistrationEmail(this.email);
 })
 
 module.exports = mongoose.model("Users", userSchema);

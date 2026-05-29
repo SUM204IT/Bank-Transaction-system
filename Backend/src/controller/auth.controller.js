@@ -1,6 +1,7 @@
 const Users = require("../models/Users.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { sendRegistrationEmail } = require("../services/email.service");
 
 async function registerUserController(req, res) {
     try {
@@ -37,6 +38,7 @@ async function registerUserController(req, res) {
                 email: user.email,
             }
         })
+
     } catch (error) {
         return res.status(401).json({
             success: false,
@@ -118,11 +120,16 @@ async function loginUserController(req, res) {
 }
 
 async function logoutUserController(req, res) {
-    res.clearCookie("token")
+    res.clearCookie("token", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict"
+    });
 
-    res.status(200).json({
+    return res.status(200).json({
+        success: true,
         message: "User logged out successfully"
-    })
+    });
 }
 
 async function getMeController(req, res) {

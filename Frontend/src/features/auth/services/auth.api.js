@@ -2,6 +2,7 @@ import axios from "axios"
 
 const api = axios.create({
     baseURL:" https://bank-transaction-system-pm0h.onrender.com",
+    // baseURL:"http://localhost:5000",
     withCredentials: true
 })
 
@@ -49,4 +50,12 @@ export async function getMe() {
         console.log(err)
     }
 
+}
+
+export async function logout() {
+    try {
+        await api.get("/api/auth/logout");
+    } catch (error) {
+        console.log("Errorin logout api auth::", error);
+    }
 }
