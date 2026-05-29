@@ -21,7 +21,9 @@ app.use(cors({
 }));
 
 const authRoutes = require("./routes/auth.routes");
+const accountRoutes = require("./routes/account.routes");
 
 app.use("/api/auth", authRoutes);
+app.use("/api/accounts", accountRoutes);
 
 module.exports = app;
