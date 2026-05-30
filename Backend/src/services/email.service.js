@@ -37,3 +37,31 @@ exports.sendRegistrationEmail = async (email) => {
 
 }
 
+exports.sendTransactionEmail = async ({userEmail, name, amount, toAccount}) => {
+    const subject = "Transaction Confirmation";
+    const body = `
+        <h1>Transaction Confirmation</h1>
+        <p>Dear ${name},</p>
+        <p>A transaction has been completed successfully.</p>
+        <p><strong>Amount:</strong> $${amount.toFixed(2)}</p>
+        <p><strong>To Account:</strong> ${toAccount}</p>
+        <p>If you have any questions or concerns, please contact our support team.</p>
+        <p>Thank you for choosing Bankify!</p>
+    `;
+    await mailSender(userEmail, subject, body);
+}
+
+
+exports.sendTransactionFailureEmail = async ({userEmail, name, amount, toAccount}) => {
+    const subject = "Transaction Failed";
+    const body = `
+        <h1>Transaction Failed</h1>
+        <p>Dear ${name},</p>
+        <p>We're sorry to inform you that your transaction has failed.</p>
+        <p><strong>Amount:</strong> $${amount.toFixed(2)}</p>
+        <p><strong>To Account:</strong> ${toAccount}</p>
+        <p>Please try again or contact our support team for assistance.</p>
+        <p>Thank you for choosing Bankify!</p>
+    `;
+    await mailSender(userEmail, subject, body);
+}
