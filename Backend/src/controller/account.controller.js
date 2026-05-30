@@ -21,7 +21,7 @@ const createAccountController = async (req, res) => {
         res.status(200).json({
             success: true,
             message: "Account created successfully.",
-            account
+            account: account
         })
 
     } catch (error) {
@@ -51,7 +51,17 @@ const getUserAccountController = async (req, res) => {
 
 const getAccountBalanceController = async (req, res) => {
     try {
-        const {accountId} = req.params();
+        // const {accountId} = req.body;
+        const account = await Account.findOne({
+            // _id: accountId,
+            user: req.user.userId
+        })
+        const balance = await account.getBalance();
+        return res.status(200).json({
+            success: true,
+            message: "Balance fetched successfully",
+            balance: balance
+        })
     } catch (error) {
         return res.status(401).json({
             success: false,

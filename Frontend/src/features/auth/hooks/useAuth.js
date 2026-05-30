@@ -1,11 +1,11 @@
 import { useContext, useEffect } from "react";
 import { AuthContext } from "../auth.context";
-import { register, login, getMe, logout } from "../services/auth.api";
+import { register, login, getMe, logout, createAccount, getAccount, getBalance } from "../services/auth.api";
 
 export const useAuth = () => {
 
-    const conetxt = useContext(AuthContext);
-    const { user, setUser, loading, setLoading} = conetxt;
+    const context = useContext(AuthContext);
+    const { user, setUser, loading, setLoading, account, setAccount, balance, setBalance} = context;
 
     const handleRegister = async ({username, email, password}) => {
         setLoading(true);
@@ -51,6 +51,21 @@ export const useAuth = () => {
         }
     } 
 
+    const handleCreateAccount = async () => {
+            setLoading(true);
+            try {
+                const data = await createAccount();
+                setAccount(data.account);
+    
+                return true;
+    
+            } catch (error) {
+                console.log(error);
+            } finally{
+                setLoading(false);
+            }
+        }
+
     useEffect(() => {
 
         const getAndSetUser = async () => {
@@ -66,11 +81,36 @@ export const useAuth = () => {
             }
         }
 
+        const getAndSetAccount = async () => {
+            try {
+                const data = await getAccount();
+                // console.log();
+                if(data?.account){
+                    setAccount(data.account[0]);
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        const getAndSetBalance = async () => {
+            try {
+                const data = await getBalance();
+                if(data?.balance){
+                    setBalance(data.balance);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
         getAndSetUser();
+        getAndSetAccount();
+        getAndSetBalance();
 
     }, [])
 
 
-    return {user, loading, handleRegister, handleLogin, handleLogout}
+    return {user, loading, handleRegister, handleLogin, handleLogout, handleCreateAccount, account, balance}
 
 }

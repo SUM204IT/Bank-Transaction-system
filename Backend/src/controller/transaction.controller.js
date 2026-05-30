@@ -142,8 +142,13 @@ async function createTransactionController(req, res) {
     let transaction = null;
 
     try {
+
+        const {userId } = req.user.userId;
+        const account = await Account.findOne({
+            user: userId,
+        });
+        const fromAccount = account._id;
         const {
-            fromAccount,
             toAccount,
             amount,
             idempotencyKey
