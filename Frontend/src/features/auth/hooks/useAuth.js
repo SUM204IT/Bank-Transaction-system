@@ -1,6 +1,6 @@
 import { useContext, useEffect } from "react";
 import { AuthContext } from "../auth.context";
-import { register, login, getMe, logout, createAccount, getAccount, getBalance } from "../services/auth.api";
+import { register, login, getMe, logout, createAccount, getAccount, getBalance, createTransaction } from "../services/auth.api";
 
 export const useAuth = () => {
 
@@ -66,6 +66,16 @@ export const useAuth = () => {
             }
         }
 
+        const handleCreateTransaction = async function ({toAccount, amount}) {
+            try {
+                const data = await createTransaction({toAccount, amount});
+
+                return true;
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
     useEffect(() => {
 
         const getAndSetUser = async () => {
@@ -111,6 +121,6 @@ export const useAuth = () => {
     }, [])
 
 
-    return {user, loading, handleRegister, handleLogin, handleLogout, handleCreateAccount, account, balance}
+    return {user, loading, handleRegister, handleLogin, handleLogout, handleCreateAccount, handleCreateTransaction, account, balance}
 
 }

@@ -1,8 +1,8 @@
 import axios from "axios"
 
 const api = axios.create({
-    baseURL:" https://bank-transaction-system-pm0h.onrender.com",
-    // baseURL:"http://localhost:5000",
+    // baseURL:" https://bank-transaction-system-pm0h.onrender.com",
+    baseURL:"http://localhost:5000",
     withCredentials: true
 })
 
@@ -81,6 +81,20 @@ export async function getAccount() {
 export async function getBalance() {
     try {
         const response = await api.get("/api/accounts/balance");
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function createTransaction({toAccount, amount}) {
+    try {
+        const response = await api.post("/api/transactions/create-transaction", {
+            toAccount,
+            amount
+        })
+        // console.log(response.data);
+
         return response.data;
     } catch (error) {
         console.log(error);

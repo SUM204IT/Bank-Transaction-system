@@ -43,7 +43,7 @@ exports.sendTransactionEmail = async ({userEmail, name, amount, toAccount}) => {
         <h1>Transaction Confirmation</h1>
         <p>Dear ${name},</p>
         <p>A transaction has been completed successfully.</p>
-        <p><strong>Amount:</strong> $${amount.toFixed(2)}</p>
+        <p><strong>Amount:</strong> $${amount}</p>
         <p><strong>To Account:</strong> ${toAccount}</p>
         <p>If you have any questions or concerns, please contact our support team.</p>
         <p>Thank you for choosing Bankify!</p>

@@ -8,6 +8,8 @@ import CreateAccount from "./features/auth/pages/CreateAccount";
 import MyAccount from "./features/auth/pages/MyAccount";
 import ProtectedCreateAccount from "./features/auth/components/ProtectedCreateAccount";
 import TransferMoney from "./features/auth/pages/TransferMoney";
+import Deposit from "./features/auth/pages/Deposit";
+import Withdraw from "./features/auth/pages/Withdraw";
 
 export const router = createBrowserRouter([
     {
@@ -30,8 +32,16 @@ export const router = createBrowserRouter([
         path: "/my-account",
         element: <Protected><MyAccount/></Protected>
     },
-    // {
-    //     path: "/transfer-money",
-    //     element: <Protected><TransferMoney/></Protected>
-    // }
+    {
+        path: "/transfer-money",
+        element: <Protected><TransferMoney/></Protected>
+    },
+    {
+        path: "/deposit-money",
+        element: <Protected><Deposit/></Protected>
+    },
+    {
+        path: "/withdraw-money",
+        element: <Protected><Withdraw/></Protected>
+    }
 ])

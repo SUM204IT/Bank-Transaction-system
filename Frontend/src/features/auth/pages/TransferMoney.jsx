@@ -5,12 +5,13 @@ import { useAuth } from "../hooks/useAuth";
 
 export default function TransferMoney() {
   const navigate = useNavigate();
-  const { loading, transferMoney } = useAuth();
+  const { loading, handleCreateTransaction} = useAuth();
 
   const [toAccount, setToAccount] = useState("");
   const [amount, setAmount] = useState("");
   const [showConfirm, setShowConfirm] = useState(false);
   const [processing, setProcessing] = useState(false);
+  const [receiverUser, setReceiverUser] = useState("");
 
   const handleTransferClick = (e) => {
     e.preventDefault();
@@ -32,7 +33,7 @@ export default function TransferMoney() {
     try {
       setProcessing(true);
 
-      const success = await transferMoney({
+      const success = await handleCreateTransaction({
         toAccount,
         amount: Number(amount),
       });

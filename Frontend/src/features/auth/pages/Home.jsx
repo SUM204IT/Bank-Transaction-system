@@ -338,10 +338,11 @@ export default function Home() {
           </p>
 
           <button
-            onClick={() =>
+            onClick={() => {
               account
                 ? navigate("/my-account")
                 : navigate("/create-account")
+            }
             }
             className="mt-8 px-8 py-4 rounded-2xl bg-white text-black font-semibold"
           >
