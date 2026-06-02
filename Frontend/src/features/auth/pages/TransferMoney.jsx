@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import LoadingScreen from "../components/Loading";
 import { useAuth } from "../hooks/useAuth";
+import  { v7 as uuidv7 } from "uuid";
 
 export default function TransferMoney() {
   const navigate = useNavigate();
@@ -11,7 +12,11 @@ export default function TransferMoney() {
   const [amount, setAmount] = useState("");
   const [showConfirm, setShowConfirm] = useState(false);
   const [processing, setProcessing] = useState(false);
-  const [receiverUser, setReceiverUser] = useState("");
+  const [password, setPassword] = useState("");
+  const idempotencyKey = useRef(uuidv7());
+  console.log(idempotencyKey);
+
+  
 
   const handleTransferClick = (e) => {
     e.preventDefault();
@@ -36,6 +41,8 @@ export default function TransferMoney() {
       const success = await handleCreateTransaction({
         toAccount,
         amount: Number(amount),
+        idempotencyKey: idempotencyKey.current,
+        password:password
       });
 
       if (success) {
@@ -117,6 +124,22 @@ export default function TransferMoney() {
                   setAmount(e.target.value)
                 }
                 placeholder="Enter amount"
+                className="w-full bg-[#1e293b] border border-white/5 px-4 py-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
+
+            <div>
+              <label className="block mb-2 text-gray-300">
+                Password
+              </label>
+
+              <input
+                type="password"
+                value={password}
+                onChange={(e) =>
+                  setPassword(e.target.value)
+                }
+                placeholder="Enter password"
                 className="w-full bg-[#1e293b] border border-white/5 px-4 py-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
             </div>

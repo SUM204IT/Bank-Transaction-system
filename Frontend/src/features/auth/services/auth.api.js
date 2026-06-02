@@ -87,15 +87,19 @@ export async function getBalance() {
     }
 }
 
-export async function createTransaction({toAccount, amount}) {
+export async function createTransaction({toAccount, amount, idempotencyKey, password}) {
     try {
         const response = await api.post("/api/transactions/create-transaction", {
             toAccount,
-            amount
+            amount,
+            idempotencyKey,
+            password: password
         })
-        // console.log(response.data);
 
-        return response.data;
+        // const result = await response.json();
+        console.log(response.data);
+
+        return response;
     } catch (error) {
         console.log(error);
     }

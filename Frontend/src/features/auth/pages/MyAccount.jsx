@@ -1,10 +1,17 @@
 import LoadingScreen from "../components/Loading";
 import { useAuth } from "../hooks/useAuth";
 import { Navigate, useNavigate } from "react-router";
+import { useRef } from "react";
 
 export default function MyAccount() {
   const { account, loading, balance } = useAuth();
   const navigate = useNavigate();
+
+  const transferMoneyHandler = async () => {
+
+    navigate("/transfer-money");
+
+  }
 
   if (loading) {
     return (
@@ -129,9 +136,9 @@ export default function MyAccount() {
 
           <div className="grid sm:grid-cols-3 gap-4">
 
-            <button className="bg-[#1e293b] hover:bg-indigo-600 transition rounded-2xl py-4 font-medium" onClick={() => {
-                navigate("/transfer-money")
-            }}>
+            <button className="bg-[#1e293b] hover:bg-indigo-600 transition rounded-2xl py-4 font-medium"
+            onClick={transferMoneyHandler} 
+            >
               Transfer Money
             </button>
 

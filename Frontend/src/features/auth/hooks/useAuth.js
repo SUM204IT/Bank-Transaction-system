@@ -66,9 +66,11 @@ export const useAuth = () => {
             }
         }
 
-        const handleCreateTransaction = async function ({toAccount, amount}) {
+        const handleCreateTransaction = async function ({toAccount, amount, idempotencyKey, password}) {
             try {
-                const data = await createTransaction({toAccount, amount});
+                const response = await createTransaction({toAccount, amount, idempotencyKey, password});
+                // const result = await response.json();
+                // alert(result.message);
 
                 return true;
             } catch (error) {

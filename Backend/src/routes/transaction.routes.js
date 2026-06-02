@@ -5,7 +5,8 @@ const authMiddleware = require("../middleware/auth.middleware");
 const transactionController = require("../controller/transaction.controller");
 
 router.post("/create-transaction", authMiddleware.authUser, transactionController.createTransactionController);
-router.post("/system/initial-funds", authMiddleware.authSystemUserMiddleware, transactionController.createInitialFundsTransaction)
+router.post("/system/initial-funds", authMiddleware.authSystemUserMiddleware, transactionController.createInitialFundsTransaction);
+router.post("/receiver-details", authMiddleware.authUser, transactionController.getReceiverDetailsController);
 
 
 module.exports = router;

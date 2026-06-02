@@ -4,7 +4,7 @@ const {sendTransactionEmail} = require("../services/email.service");
 const Account = require("../models/Account.model");
 const mongoose = require("mongoose");
 const Users = require("../models/Users.model");
-const  { v7 : uuidv7 } = require("uuid");
+const bcrypt = require("bcrypt");
 
 
 //create new transaction
@@ -155,11 +155,14 @@ async function createTransactionController(req, res) {
         const fromAccount = account._id;
         // console.log("fromAccount::", fromAccount);
 
-        const idempotencyKey = uuidv7();
+        // const idempotencyKey = uuidv7();
+        // const idempotencyKey = req.params.idempotencyKey;
 
         const {
             toAccount,
-            amount
+            amount,
+            idempotencyKey,
+            password
         } = req.body;
 
         // -------------------------
@@ -170,12 +173,23 @@ async function createTransactionController(req, res) {
             !fromAccount ||
             !toAccount ||
             !amount ||
-            !idempotencyKey
+            !idempotencyKey ||
+            !password
         ) {
             return res.status(400).json({
                 success: false,
                 message: "All fields are required."
             });
+        }
+
+        //password validation
+        const user = await Users.findById(userId);
+        const isPasswordMatch = await bcrypt.compare(password, user.password);
+        if(!isPasswordMatch){
+            return res.json(404).status({
+                successs: false,
+                message: "Incorrect password."
+            })
         }
 
         if (String(fromAccount) === String(toAccount)) {
@@ -492,9 +506,46 @@ async function createInitialFundsTransaction(req, res) {
     })
 }
 
+
+async function getReceiverDetailsController(req, res) {
+    try {
+        const {toAccount} = req.body;
+
+        const receiverAccount = await Account.findOne({
+            _id: toAccount
+        });
+
+        if (!receiverAccount) {
+            return res.status(404).json({
+                success: false,
+                message: "Receiver account not found."
+            });
+        }
+
+        const receiverUserId = receiverAccount.user;
+        const receiverUserDetails = await Users.findById(receiverUserId);
+
+        
+
+        return res.status(200).json({
+            success: true,
+            message: "Receiver details retrieved successfully.",
+            receiverUserDetails: receiverUserDetails
+        });
+
+    } catch (error) {
+        console.error("Error fetching receiver details:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error."
+        });
+    }
+}
+
 module.exports = {
     createTransactionController,
-    createInitialFundsTransaction
+    createInitialFundsTransaction,
+    getReceiverDetailsController
 }
 
 
